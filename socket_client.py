@@ -7,7 +7,7 @@ from Queue import Queue
 from pypetalo import config
 from pypetalo import comms
 from threading import Thread, Event
-
+import argparse
 
 if __name__ == "__main__":
 
