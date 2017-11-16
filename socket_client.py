@@ -4,7 +4,7 @@ import socket as sk
 import numpy as np
 import json
 from Queue import Queue
-from pypetalo import config 
+from pypetalo import config
 from pypetalo import comms
 from threading import Thread, Event
 
@@ -14,7 +14,7 @@ def main():
     # CONFIG // STOP
 
     COMMAND = {'command':"STOP",
-                'arg1':"1800",
+                'arg1':"10",
                 'arg2':"13"}
 
     sh_data = config.DATA(read=True)
