@@ -45,6 +45,11 @@ if __name__ == "__main__":
                     'arg1':"88",
                     'arg2':"88"}
         clt_queue.put(json.dumps(COMMAND))
+    elif args.cfilter:
+        COMMAND = {'command':"C_FILTER",
+                    'arg1':''.join(args.arg1),
+                    'arg2':"88"}
+        clt_queue.put(json.dumps(COMMAND))
 
 
     stopper.set()
