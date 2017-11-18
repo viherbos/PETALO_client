@@ -18,6 +18,8 @@ if __name__ == "__main__":
                         help="Stop Acquisition")
     parser.add_argument("-c", "--calibration", action="store_true",
                         help="Calibration routine for QDC & TDC")
+    parser.add_argument("-f", "--cfilter", action="store_true",
+                        help="Coincidence Filter")
     parser.add_argument('arg1', metavar='N', nargs='?', help='')
     parser.add_argument('arg2', metavar='N', nargs='?', help='')
 
