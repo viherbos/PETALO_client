@@ -33,6 +33,7 @@ if __name__ == "__main__":
 
 
     if args.acquire:
+        # ACQUIRE COMMAND: arg1=seconds arg2=data/my_data
         COMMAND = {'command':"ACQUIRE",
                     'arg1':''.join(args.arg1),
                     'arg2':"88"}
@@ -48,6 +49,7 @@ if __name__ == "__main__":
                     'arg2':"88"}
         clt_queue.put(json.dumps(COMMAND))
     elif args.cfilter:
+        # COINCIDENCE FILTER COMMAND: arg1=i_data/my_data arg2=o_data/my_data
         COMMAND = {'command':"C_FILTER",
                     'arg1':''.join(args.arg1),
                     'arg2':"88"}
