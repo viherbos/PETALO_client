@@ -20,6 +20,9 @@ if __name__ == "__main__":
                         help="Calibration routine for QDC & TDC")
     parser.add_argument("-f", "--cfilter", action="store_true",
                         help="Coincidence Filter")
+    parser.add_argument("-t", "--temperature", action="store_true",
+                        help="Temperature in ASICs")
+
     parser.add_argument('arg1', metavar='N', nargs='?', help='')
     parser.add_argument('arg2', metavar='N', nargs='?', help='')
 
@@ -54,7 +57,11 @@ if __name__ == "__main__":
                     'arg1':''.join(args.arg1),
                     'arg2':"88"}
         clt_queue.put(json.dumps(COMMAND))
-
+    elif args.temperature:
+        COMMAND = {'command':"TEMP",
+                    'arg1':"88",
+                    'arg2':"88"}
+        clt_queue.put(json.dumps(COMMAND))
 
     stopper.set()
     thread_CLIENT.join()
