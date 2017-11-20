@@ -45,8 +45,10 @@ if __name__ == "__main__":
     stopper = Event()
 
     thread_Logger   = Logger(sh_data,msg_queue,stopper)
+    thread_SERVER = SCK_server(sh_data,msg_queue,stopper)
 
     thread_Logger.start()
+    thread_SERVER.start()
 
     while not stopper.is_set():
         try:
@@ -56,4 +58,6 @@ if __name__ == "__main__":
             break
 
     stopper.set()
+
+    thread_SERVER.join()
     thread_Logger.join()
