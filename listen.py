@@ -1,3 +1,6 @@
+#!/home/viherbos/anaconda2/bin/python
+
+
 from threading import Thread, Event
 from Queue import Queue, Empty
 import subprocess as sbp
@@ -15,7 +18,7 @@ from pypetalo.comms import SCK_client as SCK_client
 
 class Logger(Thread):
 
-    def __init__(self,queue,stopper):
+    def __init__(self,upper_class,queue,stopper):
         self.uc = upper_class
         super(Logger,self).__init__()
         self.queue = queue
@@ -41,7 +44,7 @@ class Logger(Thread):
 if __name__ == "__main__":
 
     sh_data = DATA(read=True)
-    srv_queue = Queue()
+    msg_queue = Queue()
     stopper = Event()
 
     thread_Logger   = Logger(sh_data,msg_queue,stopper)
