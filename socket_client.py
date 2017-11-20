@@ -39,7 +39,7 @@ if __name__ == "__main__":
         # ACQUIRE COMMAND: arg1=seconds arg2=data/my_data
         COMMAND = {'command':"ACQUIRE",
                     'arg1':''.join(args.arg1),
-                    'arg2':"88"}
+                    'arg2':''.join(args.arg2)}
         clt_queue.put(json.dumps(COMMAND))
     elif args.stop:
         COMMAND = {'command':"STOP",
