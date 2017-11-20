@@ -16,7 +16,8 @@ from pypetalo.comms import SCK_client as SCK_client
 class Logger(Thread):
 
     def __init__(self,queue,stopper):
-        super(MSG_executer,self).__init__()
+        self.uc = upper_class
+        super(Logger,self).__init__()
         self.queue = queue
         self.stopper = stopper
 
@@ -39,10 +40,11 @@ class Logger(Thread):
 
 if __name__ == "__main__":
 
+    sh_data = DATA(read=True)
     srv_queue = Queue()
     stopper = Event()
-    
-    thread_Logger   = Logger(msg_queue,stopper)
+
+    thread_Logger   = Logger(sh_data,msg_queue,stopper)
 
     thread_Logger.start()
 
