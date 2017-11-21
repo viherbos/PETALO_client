@@ -33,7 +33,7 @@ class Logger(Thread):
         while not self.stopper.is_set():
             try:
                 client, client_address = server_sock.accept()
-                data = client.recv(8192)
+                data = client.recv(1024)
                 print data
             except:
                 pass
