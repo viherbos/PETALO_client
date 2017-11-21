@@ -8,6 +8,7 @@ import sys
 import os
 import json
 import time
+import socket as sk
 
 # from config import DATA
 # from comms import SCK_server, SCK_client
@@ -18,36 +19,37 @@ from pypetalo.comms import SCK_client as SCK_client
 
 class Logger(Thread):
 
-    def __init__(self,upper_class,queue,stopper):
+    def __init__(self,upper_class,stopper):
         self.uc = upper_class
         super(Logger,self).__init__()
-        self.queue = queue
         self.stopper = stopper
 
     def run(self):
+        server_sock = sk.socket()
+        server_sock.bind((self.uc.daqd_cfg['localhost'],
+                          self.uc.daqd_cfg['server_port']+1))
+        server_sock.listen(4)
+
         while not self.stopper.is_set():
             try:
-                self.qrx = self.queue.get(True,timeout=0.5)
-                # Timeout should decrease computational load
-            except Empty:
+                client, client_address = server_sock.accept()
+                data = client.recv(8192)
+                print data
+            except:
                 pass
                 # Wait for another timeout
-            else:
-                sys.stdout.write(self.qrx)
-                self.queue.task_done()
+
 
 
 if __name__ == "__main__":
 
     sh_data = DATA(read=True)
-    msg_queue = Queue()
     stopper = Event()
 
-    thread_Logger   = Logger(sh_data,msg_queue,stopper)
-    thread_SERVER = SCK_server(sh_data,msg_queue,stopper)
+    thread_Logger   = Logger(sh_data,stopper)
+
 
     thread_Logger.start()
-    thread_SERVER.start()
 
     while not stopper.is_set():
         try:
@@ -58,5 +60,4 @@ if __name__ == "__main__":
 
     stopper.set()
 
-    thread_SERVER.join()
     thread_Logger.join()
