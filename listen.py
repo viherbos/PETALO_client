@@ -33,11 +33,7 @@ class Logger(Thread):
                 pass
                 # Wait for another timeout
             else:
-                self.item = json.loads(self.qrx)
-
-                if (self.item['command']=="OUTPUT"):
-                        sys.stdout.write(self.item['arg1'])
-
+                sys.stdout.write(self.qrx)
                 self.queue.task_done()
 
 
