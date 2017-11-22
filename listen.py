@@ -21,7 +21,7 @@ class Logger_S(Thread):
 
     def __init__(self,upper_class,queue,stopper):
         self.uc = upper_class
-        super(Logger,self).__init__()
+        super(Logger_S,self).__init__()
         self.queue = queue
         self.stopper = stopper
 
@@ -66,5 +66,3 @@ if __name__ == "__main__":
     stopper.set()
     thread_Logger.join()
     thread_Screen.join()
-
-    

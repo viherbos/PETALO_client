@@ -88,7 +88,7 @@ class SCK_client(Thread):
                 try:
                     print self.uc.daqd_cfg['ext_ip']
                     self.s.connect((self.uc.daqd_cfg['ext_ip'],
-                                    port))
+                                    self.port))
                     self.s.send(self.item)
                     print ("Data Sent: %s" % self.item)
                     # Insert handshake
