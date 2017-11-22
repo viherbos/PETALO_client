@@ -27,15 +27,10 @@ class Logger_S(Thread):
 
     def run(self):
         while not self.stopper.is_set():
-            try:
-                self.qrx = self.queue.get(True,timeout=0.5)
-                # Timeout should decrease computational load
-            except Empty:
-                pass
-                # Wait for another timeout
-            else:
-                print self.qrx
-                self.queue.task_done()
+            self.qrx = self.queue.get() #(True,timeout=0.5)
+            # Timeout should decrease computational load
+            sys.stdout.write(self.qrx)
+            self.queue.task_done()
 
 
 

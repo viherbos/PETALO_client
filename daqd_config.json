@@ -4,6 +4,6 @@
   "socket": "/tmp/d.sock",
   "server_port": 5005,
   "daq_sharem": "/dev/shm/daqd_shm",
-  "buffer_size": 1024,
+  "buffer_size": 8096,
   "daq_type": "GBE",
   "localhost": "158.42.34.154"}

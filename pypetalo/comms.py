@@ -55,10 +55,10 @@ class SCK_server(Thread):
                     self.data = self.conn.recv(int(self.uc.daqd_cfg['buffer_size']))
                 except:
                     print ("Data not received by server")
-                    pass
+
                 else:
                     self.queue.put(self.data)
-                    self.conn.send(json.dumps(BYE_MSG))
+                    #self.conn.send(json.dumps(BYE_MSG))
                     # Handshake Message
                     self.conn.close()
         print ("SERVER SOCKET IS DEAD")
@@ -92,18 +92,18 @@ class SCK_client(Thread):
                     self.s.send(self.item)
                     print ("Data Sent: %s" % self.item)
                     # Insert handshake
-                    self.s.settimeout(5.0)
-                    try:
-                        # ADD TIMEOUT Mechanism !!!!
-                        data_r = json.loads(self.s.recv(int(self.uc.daqd_cfg['buffer_size'])))
-                        print data_r
-                        if (data_r['command']!='BYE'):
-                            print ('Communication Error handshake failure (1)')
-                            # A JSON stream has been received but it isn't correct
-                    except:
-                        print ('Communication Error handshake failure (2)')
-                        # No JSON stream has been received
-                        break
+                    # self.s.settimeout(5.0)
+                    # try:
+                    #     # ADD TIMEOUT Mechanism !!!!
+                    #     data_r = json.loads(self.s.recv(int(self.uc.daqd_cfg['buffer_size'])))
+                    #     print data_r
+                    #     if (data_r['command']!='BYE'):
+                    #         print ('Communication Error handshake failure (1)')
+                    #         # A JSON stream has been received but it isn't correct
+                    # except:
+                    #     print ('Communication Error handshake failure (2)')
+                    #     # No JSON stream has been received
+                    #     break
                     self.queue.task_done()
                     self.s.close()
                 except sk.error as e:

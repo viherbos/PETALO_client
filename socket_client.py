@@ -34,7 +34,7 @@ if __name__ == "__main__":
     thread_CLIENT = comms.SCK_client(sh_data,
                                      clt_queue,
                                      stopper,
-                                     int(sh_data.daqd_cfg['server_port'])+1)
+                                     int(sh_data.daqd_cfg['server_port']))
     thread_CLIENT.start()
 
 
