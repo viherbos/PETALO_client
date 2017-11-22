@@ -29,14 +29,14 @@ class Logger(Thread):
         server_sock.bind((self.uc.daqd_cfg['localhost'],
                           self.uc.daqd_cfg['server_port']+1))
         server_sock.listen(4)
+        client, client_address = server_sock.accept()
 
         while not self.stopper.is_set():
             try:
-                client, client_address = server_sock.accept()
                 data = client.recv(1024)
                 print data
             except:
-                pass
+                client.shutdown(sk.SHUT_RDWR)
                 # Wait for another timeout
 
 
