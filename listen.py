@@ -34,9 +34,13 @@ class Logger(Thread):
         while not self.stopper.is_set():
             try:
                 data = client.recv(1024)
-                print data
+                if not data:
+                    break
+                else:
+                    print data
             except:
                 client.shutdown(sk.SHUT_RDWR)
+                stopper.set()
                 # Wait for another timeout
 
 
