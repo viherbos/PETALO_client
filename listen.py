@@ -17,43 +17,44 @@ from pypetalo.comms import SCK_server as SCK_server
 from pypetalo.comms import SCK_client as SCK_client
 
 
-class Logger(Thread):
+class Logger_S(Thread):
 
-    def __init__(self,upper_class,stopper):
+    def __init__(self,upper_class,queue,stopper):
         self.uc = upper_class
         super(Logger,self).__init__()
+        self.queue = queue
         self.stopper = stopper
 
     def run(self):
-        server_sock = sk.socket()
-        server_sock.bind((self.uc.daqd_cfg['localhost'],
-                          self.uc.daqd_cfg['server_port']+1))
-        server_sock.listen(4)
-        client, client_address = server_sock.accept()
-
         while not self.stopper.is_set():
             try:
-                data = client.recv(1024)
-                if not data:
-                    break
-                else:
-                    print data
-            except:
-                client.shutdown(sk.SHUT_RDWR)
-                stopper.set()
+                self.qrx = self.queue.get(True,timeout=0.5)
+                # Timeout should decrease computational load
+            except Empty:
+                pass
                 # Wait for another timeout
+            else:
+                print self.qrx
+                self.queue.task_done()
 
 
 
 if __name__ == "__main__":
 
-    sh_data = DATA(read=True)
+    sh_data   = DATA(read=True)
+    log_queue = Queue()
     stopper = Event()
 
-    thread_Logger   = Logger(sh_data,stopper)
-
+    thread_Logger = SCK_server( sh_data,
+                                log_queue,
+                                stopper,
+                                int(sh_data.daqd_cfg['server_port'])+1)
+    thread_Screen = Logger_S(   sh_data,
+                                log_queue,
+                                stopper)
 
     thread_Logger.start()
+    thread_Screen.start()
 
     while not stopper.is_set():
         try:
@@ -63,5 +64,7 @@ if __name__ == "__main__":
             break
 
     stopper.set()
-
     thread_Logger.join()
+    thread_Screen.join()
+
+    
