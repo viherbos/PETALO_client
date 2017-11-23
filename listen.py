@@ -27,14 +27,14 @@ class Logger(Thread):
     def run(self):
         server_sock = sk.socket()
         server_sock.bind((self.uc.daqd_cfg['localhost'],
-                          self.uc.daqd_cfg['server_port']+1))
+                          5006))
         server_sock.listen(4)
         client, client_address = server_sock.accept()
 
         while not self.stopper.is_set():
             try:
                 data = client.recv(1024)
-                print data
+                sys.stdout.write(data)
             except:
                 client.shutdown(sk.SHUT_RDWR)
                 # Wait for another timeout
@@ -45,19 +45,26 @@ if __name__ == "__main__":
 
     sh_data = DATA(read=True)
     stopper = Event()
+    srv_queue = Queue()
 
-    thread_Logger   = Logger(sh_data,stopper)
+    #thread_Logger   = Logger(sh_data,stopper)
+    thread_SERVER = SCK_server(sh_data,srv_queue,stopper)
+
+    #thread_Logger.start()
+    thread_SERVER.start()
 
 
-    thread_Logger.start()
-
-    while not stopper.is_set():
+    while True:
         try:
-            time.sleep(0.5)
+            qrx = srv_queue.get(True,timeout=0.5)
         except KeyboardInterrupt:
             print ("KeyBoard Interrupt")
+            stopper.set()
             break
+        except Empty:
+            pass
+        else:
+            print qrx
 
-    stopper.set()
 
-    thread_Logger.join()
+    thread_SERVER.join()

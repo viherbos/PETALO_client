@@ -33,8 +33,8 @@ class SCK_server(Thread):
             except sk.timeout:
                 pass
             else:
-                print ("Connection Host/Address: %s  %s" % (self.uc.daqd_cfg['localhost'],
-                                                        self.addr))
+                #print ("Connection Host/Address: %s  %s" % (self.uc.daqd_cfg['localhost'],
+                #                                        self.addr))
                 try:
                     self.s.settimeout(10.0)
                     # Ten seconds to receive the data
