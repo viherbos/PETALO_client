@@ -8,10 +8,9 @@ import socket as sk
 
 BYE_MSG={'command':"BYE",'arg1':"",'arg2':""}
 
-
 class SCK_server(Thread):
 
-    def __init__(self,upper_class,queue,stopper,port):
+    def __init__(self,upper_class,queue,stopper):
         self.uc = upper_class
         super(SCK_server,self).__init__()
         self.queue = queue
@@ -19,7 +18,7 @@ class SCK_server(Thread):
         self.s = sk.socket(sk.AF_INET, sk.SOCK_STREAM)
         try:
             self.s.bind((self.uc.daqd_cfg['localhost'],
-                        port))
+                        self.uc.daqd_cfg['server_port']))
             self.s.listen(5)
         except sk.error as e:
             print ("Server couldn't be opened: %s" % e)
@@ -42,10 +41,10 @@ class SCK_server(Thread):
                     self.data = self.conn.recv(int(self.uc.daqd_cfg['buffer_size']))
                 except:
                     print ("Data not received by server")
-
+                    pass
                 else:
                     self.queue.put(self.data)
-                    #self.conn.send(json.dumps(BYE_MSG))
+                    self.conn.send(json.dumps(BYE_MSG))
                     # Handshake Message
                     self.conn.close()
         self.s.close()
@@ -54,12 +53,11 @@ class SCK_server(Thread):
 
 class SCK_client(Thread):
 
-    def __init__(self,upper_class,queue,stopper,port):
+    def __init__(self,upper_class,queue,stopper):
         self.uc = upper_class
         super(SCK_client,self).__init__()
         self.queue = queue
         self.stopper = stopper
-        self.port = port
 
 
     def run(self):
@@ -76,7 +74,7 @@ class SCK_client(Thread):
                 try:
                     print self.uc.daqd_cfg['ext_ip']
                     self.s.connect((self.uc.daqd_cfg['ext_ip'],
-                                    self.port))
+                                    int(self.uc.daqd_cfg['client_port'])))
                     self.s.send(self.item)
                     # print ("Data Sent: %s" % self.item)
                     # Insert handshake
