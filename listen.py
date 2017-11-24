@@ -20,7 +20,8 @@ from pypetalo.comms import SCK_client as SCK_client
 
 if __name__ == "__main__":
 
-    sh_data = DATA(read=True)
+    sh_data   = DATA(read=True)
+    log_queue = Queue()
     stopper = Event()
     srv_queue = Queue()
 
