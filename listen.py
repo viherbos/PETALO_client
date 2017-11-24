@@ -45,5 +45,4 @@ if __name__ == "__main__":
             sys.stdout.write(qrx)
             srv_queue.task_done()
 
-
     thread_SERVER.join()
