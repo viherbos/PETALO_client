@@ -36,7 +36,7 @@ class SCK_server(Thread):
                 #print ("Connection Host/Address: %s  %s" % (self.uc.daqd_cfg['localhost'],
                 #                                        self.addr))
                 try:
-                    self.s.settimeout(10.0)
+                    self.s.settimeout(5.0)
                     # Ten seconds to receive the data
                     self.data = self.conn.recv(int(self.uc.daqd_cfg['buffer_size']))
                 except:
@@ -47,6 +47,7 @@ class SCK_server(Thread):
                     self.conn.send(json.dumps(BYE_MSG))
                     # Handshake Message
                     self.conn.close()
+        self.s.close()
         print ("SERVER SOCKET IS DEAD")
 
 
@@ -75,11 +76,11 @@ class SCK_client(Thread):
                     self.s.connect((self.uc.daqd_cfg['ext_ip'],
                                     int(self.uc.daqd_cfg['client_port'])))
                     self.s.send(self.item)
-                    print ("Data Sent: %s" % self.item)
+                    # print ("Data Sent: %s" % self.item)
                     # Insert handshake
-                    self.s.settimeout(5.0)
                     try:
                         # ADD TIMEOUT Mechanism !!!!
+                        self.s.settimeout(5.0)
                         data_r = json.loads(self.s.recv(int(self.uc.daqd_cfg['buffer_size'])))
                         print data_r
                         if (data_r['command']!='BYE'):

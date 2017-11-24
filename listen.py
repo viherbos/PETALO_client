@@ -17,29 +17,6 @@ from pypetalo.comms import SCK_server as SCK_server
 from pypetalo.comms import SCK_client as SCK_client
 
 
-class Logger(Thread):
-
-    def __init__(self,upper_class,stopper):
-        self.uc = upper_class
-        super(Logger,self).__init__()
-        self.stopper = stopper
-
-    def run(self):
-        server_sock = sk.socket()
-        server_sock.bind((self.uc.daqd_cfg['localhost'],
-                          5006))
-        server_sock.listen(4)
-        client, client_address = server_sock.accept()
-
-        while not self.stopper.is_set():
-            try:
-                data = client.recv(1024)
-                sys.stdout.write(data)
-            except:
-                client.shutdown(sk.SHUT_RDWR)
-                # Wait for another timeout
-
-
 
 if __name__ == "__main__":
 
@@ -64,7 +41,8 @@ if __name__ == "__main__":
         except Empty:
             pass
         else:
-            print qrx
+            sys.stdout.write(qrx)
+            srv_queue.task_done()
 
 
     thread_SERVER.join()
