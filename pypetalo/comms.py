@@ -8,6 +8,7 @@ import socket as sk
 
 BYE_MSG={'command':"BYE",'arg1':"",'arg2':""}
 
+
 class SCK_server(Thread):
 
     def __init__(self,upper_class,queue,stopper):
@@ -23,7 +24,6 @@ class SCK_server(Thread):
         except sk.error as e:
             print ("Server couldn't be opened: %s" % e)
             os._exit(1)
-
 
     def run(self):
         while not self.stopper.is_set():
@@ -41,7 +41,6 @@ class SCK_server(Thread):
                     self.data = self.conn.recv(int(self.uc.daqd_cfg['buffer_size']))
                 except:
                     print ("Data not received by server")
-                    pass
                 else:
                     self.queue.put(self.data)
                     self.conn.send(json.dumps(BYE_MSG))
@@ -58,7 +57,6 @@ class SCK_client(Thread):
         super(SCK_client,self).__init__()
         self.queue = queue
         self.stopper = stopper
-
 
     def run(self):
         while not self.stopper.is_set():
@@ -94,5 +92,4 @@ class SCK_client(Thread):
                     self.s.close()
                 except sk.error as e:
                     print ("Client couldn't open socket: %s" % e)
-                    #os._exit(1)
                     break
