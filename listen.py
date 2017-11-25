@@ -1,6 +1,5 @@
 #!/home/viherbos/anaconda2/bin/python
 
-
 from threading import Thread, Event
 from Queue import Queue, Empty
 import subprocess as sbp
@@ -9,12 +8,9 @@ import os
 import json
 import time
 import socket as sk
-
-
 from pypetalo.config import DATA as DATA
 from pypetalo.comms import SCK_server as SCK_server
 from pypetalo.comms import SCK_client as SCK_client
-
 
 
 if __name__ == "__main__":
@@ -24,7 +20,6 @@ if __name__ == "__main__":
     stopper = Event()
     srv_queue = Queue()
 
-    #thread_Logger   = Logger(sh_data,stopper)
     thread_SERVER = SCK_server(sh_data,srv_queue,stopper)
 
     #thread_Logger.start()
@@ -33,7 +28,7 @@ if __name__ == "__main__":
 
     while True:
         try:
-            qrx = srv_queue.get(True,timeout=0.5)
+            qrx = srv_queue.get(True,timeout=1)
         except KeyboardInterrupt:
             print ("KeyBoard Interrupt")
             stopper.set()
