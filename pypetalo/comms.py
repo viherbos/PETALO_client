@@ -45,7 +45,7 @@ class SCK_server(Thread):
                     self.queue.put(self.data)
                     self.conn.send(json.dumps(BYE_MSG))
                     # Handshake Message
-                    self.conn.close()
+                    #self.conn.close()
         self.s.close()
         print ("SERVER SOCKET IS DEAD")
 
