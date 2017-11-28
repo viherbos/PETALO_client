@@ -2,55 +2,47 @@ import json
 import socket as sk
 
 
-
-class JSON_config(object):
-
-    def __init__(self, filename, data=None):
-        self.data = data
-        self.filename = filename
-
-    def config_write(self):
-        writeName = self.filename
-        try:
-            with open(writeName,'w') as outfile:
-                json.dump(self.data, outfile)
-        except IOError as e:
-            print(e)
-
-    def config_read(self):
-        readName = self.filename
-        try:
-            with open(readName,'r') as infile:
-                dict_values = json.load(infile)
-                return (dict_values)
-        except IOError as e:
-            print(e)
-            return('None')
-
-
-class DATA(JSON_config):
+class DATA(object):
     # Only filenames are read. The rest is taken from json file
     def __init__(self,read=True):
-        self.config_filename = "daqd_config.json"
-        self.out_log = "daq.log"
-        self.local_host_name = sk.gethostname()
+        self.filename = "daqd_config.json"
+        #self.local_host = sk.gethostbyname(sk.gethostname())
+        # Problems with host file in Ubuntu
+        self.local_host = [l for l in ([ip for ip in sk.gethostbyname_ex(sk.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [sk.socket(sk.AF_INET, sk.SOCK_DGRAM)]][0][1]]) if l][0][0]
+        self.data=[]
 
-        if (read):
-
-            super(DATA, self).__init__(filename=self.config_filename)
-            self.daqd_cfg = super(DATA,self).config_read()
+        if (read==True):
+            self.config_read()
+            self.data['localhost']=self.local_host
         else:
             # These are default values.
             # WARNING this data can change, see config file
             # For remote application same port can be used in both ends
             # For remote application use local_host_name and true ext_ip
-            self.daqd_cfg= {'server_port':5005,
-                            'client_port':5006,
-                            'buffer_size':1024,
-                            'localhost':'localhost',
-                            'ext_ip':'localhost',
-                            'path_name' :"./sw_daq_tofpet2/",
-                            'socket'    :"/tmp/d.sock",
-                            'daq_type'  :"GBE",
-                            'daq_sharem':"/dev/shm/daqd_shm"
-                            }
+            self.data= {'server_port'    :5005,
+                        'client_port'    :5006,
+                        'buffer_size'    :1024,
+                        'localhost'      :self.local_host,
+                        'ext_ip'         :'',
+                        'daqd_path_name' :"../sw_daq_tofpet2/",
+                        'data_path'      :"/data/",
+                        'socket'         :"/tmp/d.sock",
+                        'daq_type'       :"GBE",
+                        'daq_sharem'     :"/dev/shm/daqd_shm",
+                        'run'            :0
+                        }
+        self.config_write()
+
+    def config_write(self):
+        try:
+            with open(self.filename,'w') as outfile:
+                json.dump(self.data, outfile, indent=4, sort_keys=False)
+        except IOError as e:
+            print(e)
+
+    def config_read(self):
+        try:
+            with open(self.filename,'r') as infile:
+                self.data = json.load(infile)
+        except IOError as e:
+            print(e)
