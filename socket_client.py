@@ -8,8 +8,15 @@ from pypetalo import config
 from pypetalo import comms
 from threading import Thread, Event
 import argparse
+import pysftp
+import os
+
 
 if __name__ == "__main__":
+
+    host = "158.42.105.105"
+    password = "1n162dell"
+    username = "viherbos"
 
     parser = argparse.ArgumentParser(description='PETALO remote control client.')
     parser.add_argument("-a", "--acquire", action="store_true",
@@ -24,6 +31,8 @@ if __name__ == "__main__":
                         help="Temperature in ASICs")
     parser.add_argument("-r", "--restart", action="store_true",
                         help="Restart RUNs counter")
+    parser.add_argument("-g", "--getsftp", action="store_true",
+                        help="Gets files through sftp")
 
     parser.add_argument('arg1', metavar='N', nargs='?', help='')
     parser.add_argument('arg2', metavar='N', nargs='?', help='')
@@ -71,6 +80,18 @@ if __name__ == "__main__":
                     'arg1':"88",
                     'arg2':"88"}
         clt_queue.put(json.dumps(COMMAND))
+    elif args.getsftp:
+        file_name = ''.join(args.arg1)
+        actual_path = os.getcwd()
+        os.chdir("/home/viherbos/DAQ_DATA")
+        with pysftp.Connection(host, username=username, password=password) as sftp:
+            sftp.chdir(sh_data.data['data_path'])
+            filenames = sftp.listdir()
+            for i in filenames:
+                if (i.find(file_name)!=-1) and (i.find(".hdf")!=-1):
+                    sftp.get(i)
+        os.chdir(actual_path)
+
 
     stopper.set()
     thread_CLIENT.join()
