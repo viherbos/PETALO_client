@@ -56,3 +56,5 @@ docs/_build/
 
 # PyBuilder
 target/
+
+daqd_config\.json

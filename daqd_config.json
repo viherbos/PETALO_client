@@ -1,13 +1,13 @@
 {
-    "daqd_path_name": "../sw_daq_tofpet2/", 
-    "socket": "/tmp/d.sock", 
-    "daq_sharem": "/dev/shm/daqd_shm", 
-    "data_path": "/data/", 
-    "daq_type": "GBE", 
-    "ext_ip": "158.42.105.105", 
-    "client_port": 5005, 
-    "server_port": 5006, 
-    "buffer_size": 1024, 
-    "run": 0, 
+    "daqd_path_name": "../sw_daq_tofpet2/",
+    "socket": "/tmp/d.sock",
+    "daq_sharem": "/dev/shm/daqd_shm",
+    "data_path": "/data/",
+    "daq_type": "GBE",
+    "ext_ip": "158.42.105.105",
+    "client_port": 5005,
+    "server_port": 5006,
+    "buffer_size": 1024,
+    "run": 1, 
     "localhost": "158.42.34.154"
 }
