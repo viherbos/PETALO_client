@@ -6,8 +6,8 @@
     "daq_type": "GBE", 
     "ext_ip": "158.42.105.105", 
     "client_port": 5005, 
-    "run": 0, 
     "server_port": 5006, 
     "buffer_size": 1024, 
+    "run": 0, 
     "localhost": "158.42.34.154"
 }
