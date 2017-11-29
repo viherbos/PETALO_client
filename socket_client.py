@@ -15,8 +15,8 @@ import os
 if __name__ == "__main__":
 
     host = "158.42.105.105"
-    password = "1n162dell"
-    username = "viherbos"
+    password = "pi31416"
+    username = "petalo"
 
     parser = argparse.ArgumentParser(description='PETALO remote control client.')
     parser.add_argument("-a", "--acquire", action="store_true",
