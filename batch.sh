@@ -1,9 +1,12 @@
 # BATCH OF MEASUREMENTS
 
-./socket_client.py -r
-./socket_client.py -a 5 timing
-./socket_client.py -a 5 timing
-./socket_client.py -a 5 timing
+python socket_client.py -r
+for i in {1..4}
+do
+python socket_client.py -a 5400 timingS
+sleep 5410
+done
+
 wait $!
 
-./socket_client.py -f timing 3
+python socket_client.py -f timingS 4
