@@ -55,11 +55,12 @@ class SCK_server(Thread):
 
 class SCK_client(Thread):
 
-    def __init__(self,upper_class,queue,stopper):
+    def __init__(self,upper_class,queue,stopper,port):
         self.uc = upper_class
         super(SCK_client,self).__init__()
         self.queue = queue
         self.stopper = stopper
+        self.port = port
 
     def run(self):
       while not self.stopper.is_set():
@@ -74,7 +75,7 @@ class SCK_client(Thread):
                 try:
                     #print self.uc.daqd_cfg['ext_ip']
                     self.s.connect((self.uc.data['ext_ip'],
-                                    int(self.uc.data['client_port'])))
+                                    self.port))
                     self.s.send(self.item)
                     # print ("Data Sent: %s" % self.item)
                     # Insert handshake

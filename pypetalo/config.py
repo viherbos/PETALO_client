@@ -21,6 +21,7 @@ class DATA(object):
             # For remote application use local_host_name and true ext_ip
             self.data= {'server_port'    :5005,
                         'client_port'    :5006,
+                        'client_port2'   :5007,
                         'buffer_size'    :1024,
                         'localhost'      :self.local_host,
                         'ext_ip'         :'',

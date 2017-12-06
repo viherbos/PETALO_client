@@ -33,6 +33,9 @@ if __name__ == "__main__":
                         help="Restart RUNs counter")
     parser.add_argument("-g", "--getsftp", action="store_true",
                         help="Gets files through sftp")
+    parser.add_argument("-d", "--dcsource", action="store_true",
+                        help="Turn DC source ON/OFF")
+
 
     parser.add_argument('arg1', metavar='N', nargs='?', help='')
     parser.add_argument('arg2', metavar='N', nargs='?', help='')
@@ -40,12 +43,19 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     sh_data = config.DATA(read=True)
-    clt_queue = Queue()
+    clt_queue   = Queue()
+    clt_queue_2 = Queue()
+
     stopper = Event()
-    thread_CLIENT = comms.SCK_client(sh_data,
+    thread_CLIENT  = comms.SCK_client(sh_data,
                                      clt_queue,
-                                     stopper)
+                                     stopper,int(sh_data.data['client_port']))
+    thread_CLIENT2 = comms.SCK_client(sh_data,
+                                     clt_queue_2,
+                                     stopper,int(sh_data.data['client_port2']))
+
     thread_CLIENT.start()
+    thread_CLIENT2.start()
 
 
     if args.acquire:
@@ -92,6 +102,13 @@ if __name__ == "__main__":
                     sftp.get(i)
         os.chdir(actual_path)
 
+    elif args.dcsource:
+        # Turn ON/OFF DC source
+        COMMAND = {'command':"DC",
+                    'arg1':''.join(args.arg1),
+                    'arg2':"88"}
+        clt_queue_2.put(json.dumps(COMMAND))
 
     stopper.set()
     thread_CLIENT.join()
+    thread_CLIENT2.join()
