@@ -34,7 +34,7 @@ if __name__ == "__main__":
     parser.add_argument("-g", "--getsftp", action="store_true",
                         help="Gets files through sftp")
     parser.add_argument("-d", "--dcsource", action="store_true",
-                        help="Turn DC source ON/OFF")
+                        help="Turn DC source ON/OFF and control Peltier")
 
 
     parser.add_argument('arg1', metavar='N', nargs='?', help='')
@@ -106,7 +106,7 @@ if __name__ == "__main__":
         # Turn ON/OFF DC source
         COMMAND = {'command':"DC",
                     'arg1':''.join(args.arg1),
-                    'arg2':"88"}
+                    'arg2':''.join(args.arg2)}
         clt_queue_2.put(json.dumps(COMMAND))
 
     stopper.set()
