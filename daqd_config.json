@@ -10,5 +10,9 @@
     "client_port2": 5007, 
     "server_port": 5006, 
     "buffer_size": 1024, 
+<<<<<<< Updated upstream
     "localhost": "158.42.105.105"
+=======
+    "localhost": "158.42.244.12"
+>>>>>>> Stashed changes
 }
