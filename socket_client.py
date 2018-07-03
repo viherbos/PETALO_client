@@ -27,6 +27,8 @@ if __name__ == "__main__":
                         help="Calibration routine for QDC & TDC")
     parser.add_argument("-f", "--cfilter", action="store_true",
                         help="Coincidence Filter")
+    parser.add_argument("-w", "--raw", action="store_true",
+                        help="Raw Single Extraction")
     parser.add_argument("-t", "--temperature", action="store_true",
                         help="Temperature in ASICs")
     parser.add_argument("-r", "--restart", action="store_true",
@@ -77,6 +79,12 @@ if __name__ == "__main__":
     elif args.cfilter:
         # COINCIDENCE FILTER COMMAND: arg1=i_data/my_data arg2=o_data/my_data
         COMMAND = {'command':"C_FILTER",
+                    'arg1':''.join(args.arg1),
+                    'arg2':''.join(args.arg2)}
+        clt_queue.put(json.dumps(COMMAND))
+    elif args.raw:
+        # RAW EXTRACTION COMMAND: arg1=i_data/my_data arg2=o_data/my_data
+        COMMAND = {'command':"RAW_FILTER",
                     'arg1':''.join(args.arg1),
                     'arg2':''.join(args.arg2)}
         clt_queue.put(json.dumps(COMMAND))
